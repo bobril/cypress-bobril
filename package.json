@@ -1,0 +1,35 @@
+{
+  "name": "cypress-bobril",
+  "version": "1.0.0",
+  "description": "Cypress commands for searching bobril components.",
+  "main": "index.d.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bobril/cypress-bobril.git"
+  },
+  "keywords": [
+    "cypress",
+    "bobril",
+    "typescript",
+    "testing"
+  ],
+  "author": "Tomáš Růt",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/bobril/cypress-bobril/issues"
+  },
+  "homepage": "https://github.com/bobril/cypress-bobril#readme",
+  "dependencies": {
+    "bbseeker": "^1.0.6",
+    "cypress": "^4.0.2"
+  },
+  "devDependencies": {
+    "@cypress/webpack-preprocessor": "^4.1.2",
+    "ts-loader": "^6.2.1",
+    "typescript": "^3.8.2",
+    "webpack": "^4.41.6"
+  }
+}
