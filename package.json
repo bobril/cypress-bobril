@@ -31,5 +31,9 @@
     "ts-loader": "^6.2.1",
     "typescript": "^3.8.2",
     "webpack": "^4.41.6"
+  },
+  "prettier": {
+    "printWidth": 140,
+    "tabWidth": 4
   }
 }
