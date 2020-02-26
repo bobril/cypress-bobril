@@ -1,5 +1,5 @@
 /// <reference types="cypress" />
-/// <reference types="./index" />
+/// <reference path="./index.d.ts" />
 
 export {};
 
