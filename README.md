@@ -25,6 +25,16 @@ and change _tsconfig.json_:
 }
 ```
 
+## How to use
+
+cypress-bobril is command plugin, so it adds following commands interacting with [BBSeeker](https://github.com/bobril/bb-seeker) (tool for exploring virtual-dom and its data):
+
+-   `cy.injectBBSeeker` - Injects **BBSeeker** to testing window - **injection is mandatory** to run all the other commands.
+-   `cy.visitWithBBSeeker` - Visits address using `cy.visit` and injects BBSeeker to window using `cy.injectBBSeeker`.
+-   `cy.findElements` - Performs recursive search of a page virtual DOM starting from bobril root objects. All matching objects are returned as instances of HTMLElement
+-   `cy.getData` - Returns selected bobril data node value.
+-   `cy.getProperty` - Returns selected bobril property value.
+
 ## How to develope
 
 Prerequisites: installed [bbcore](https://github.com/bobril/bbcore).
