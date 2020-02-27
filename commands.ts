@@ -1,4 +1,3 @@
-/// <reference types="cypress" />
 /// <reference path="./index.d.ts" />
 
 export {};
@@ -11,9 +10,11 @@ interface IBBSeeker {
 }
 
 declare global {
+    // tslint:disable-next-line: interface-name
     interface Window {
         DEBUG: boolean;
         BBSeeker: IBBSeeker;
+        eval(text: string): void;
     }
 }
 
@@ -66,15 +67,13 @@ Cypress.Commands.add(
                 return cy.wrap(win, { log: false });
             }
             return cy.readFile(bbSeekerPath, { log: false }).then(text => {
-                (win as any).eval(text); //hack
-                return win;
+                win.eval(text);
             });
         });
     }
 );
 
 function getWindow(prevSubject?: Window): Cypress.Chainable<Window> {
-    debugger;
     return prevSubject ? cy.wrap(prevSubject, { log: false }) : cy.window({ log: false });
 }
 
@@ -147,7 +146,7 @@ Cypress.Commands.add(
         });
 
         return cy.tryWithAssertionVerify(
-            window => bbFindPropetry<TData>(subject, window, selector, propertyPath, filledOptions),
+            window => bbFindProperty<TData>(subject, window, selector, propertyPath, filledOptions),
             filledOptions
         );
     }
@@ -161,18 +160,23 @@ function bbFindElement(subject: JQuery<HTMLElement> | undefined, window: Window,
     return result;
 }
 
-function log(options: IOptions, result: any, selector: string, params: Cypress.ObjectLike = {}): void {
+function log<TResult>(
+    options: IOptions,
+    result: TResult | Array<TResult> | JQuery<HTMLElement>,
+    selector: string,
+    params: Cypress.ObjectLike = {}
+): void {
     const consoleProps = Object.assign(
         {
             Yielded: result,
-            Elements: result.length,
+            Elements: (result as Array<TResult>).length,
             Selector: selector
         },
         params
     );
 
     options._log.set({
-        $el: result,
+        $el: result as JQuery<HTMLElement>,
         consoleProps: () => consoleProps
     });
 }
@@ -191,7 +195,7 @@ function bbFindData<TData>(
     return result;
 }
 
-function bbFindPropetry<TData>(
+function bbFindProperty<TData>(
     subject: JQuery<HTMLElement> | undefined,
     window: Window,
     selector: string,

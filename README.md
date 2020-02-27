@@ -12,11 +12,24 @@ Add following lines to your _commands.ts_:
 import "cypress-bobril/commands";
 ```
 
+and change _tsconfig.json_:
+
+```json
+{
+  "compilerOptions": {
+     ...
+    "types": ["cypress-bobril"],
+    ...
+  },
+  ...
+}
+```
+
 ## How to develope
 
 Prerequisites: installed [bbcore](https://github.com/bobril/bbcore).
 
-To develope and debug commands just run testing bobril page withine _sampleApp_ by command:
+To develope and debug commands just run testing bobril page within _sampleApp_ by command:
 
 ```bash
 bb
