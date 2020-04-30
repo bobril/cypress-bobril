@@ -1,3 +1,4 @@
+// eslint-disable-next-line spaced-comment
 /// <reference path="./index.d.ts" />
 
 export {};
@@ -58,15 +59,15 @@ function isString(url: string | Partial<Cypress.VisitOptions>): url is string {
 Cypress.Commands.add(
     "injectBBSeeker",
     {
-        prevSubject: ["optional", "window"]
+        prevSubject: ["optional", "window"],
     },
     (prevSubject?: Window, options?: Partial<Cypress.Loggable>): Cypress.Chainable<Window> => {
         (!options || options.log !== false) && Cypress.log({});
-        return getWindow(prevSubject).then(win => {
+        return getWindow(prevSubject).then((win) => {
             if (win.BBSeeker !== undefined) {
                 return cy.wrap(win, { log: false });
             }
-            return cy.readFile(bbSeekerPath, { log: false }).then(text => {
+            return cy.readFile(bbSeekerPath, { log: false }).then((text) => {
                 win.eval(text);
             });
         });
@@ -77,22 +78,22 @@ function getWindow(prevSubject?: Window): Cypress.Chainable<Window> {
     return prevSubject ? cy.wrap(prevSubject, { log: false }) : cy.window({ log: false });
 }
 
-Cypress.Commands.add(
-    "tryWithAssertionVerify",
-    <TValue>(findFn: (window: Window) => TValue, options: Partial<IOptions>): PromiseLike<TValue> => {
-        return cy.window({ log: false }).then(
-            {
-                timeout: (options?.timeout ?? Cypress.config("defaultCommandTimeout")) + 1000
-            },
-            window => tryWithAssertionVerify(() => findFn(window), Object.assign({ retry: true, verify: true }, options))
-        );
-    }
-);
+Cypress.Commands.add("tryWithAssertionVerify", function <TValue>(
+    findFn: (window: Window) => TValue,
+    options: Partial<IOptions>
+): PromiseLike<TValue> {
+    return cy.window({ log: false }).then(
+        {
+            timeout: (options?.timeout ?? Cypress.config("defaultCommandTimeout")) + 1000,
+        },
+        (window) => tryWithAssertionVerify(() => findFn(window), Object.assign({ retry: true, verify: true }, options))
+    );
+});
 
 function tryWithAssertionVerify<TValue>(findFn: () => TValue | PromiseLike<TValue>, options?: Partial<IOptions>): PromiseLike<TValue> {
-    return Cypress.Promise.try(findFn).then(value => {
+    return Cypress.Promise.try(findFn).then((value) => {
         return cy.verifyUpcomingAssertions(value, options, {
-            onRetry: () => tryWithAssertionVerify(findFn, options)
+            onRetry: () => tryWithAssertionVerify(findFn, options),
         });
     });
 }
@@ -100,53 +101,58 @@ function tryWithAssertionVerify<TValue>(findFn: () => TValue | PromiseLike<TValu
 Cypress.Commands.add(
     "findElements",
     {
-        prevSubject: ["optional", "element"]
+        prevSubject: ["optional", "element"],
     },
     (subject: JQuery<HTMLElement> | undefined, selector: string, options?: Partial<IOptions>): Cypress.Chainable<JQuery<HTMLElement>> => {
         const filledOptions: IOptions = Object.assign(options || {}, {
-            _log: Cypress.log({ message: [selector], $el: subject })
+            _log: Cypress.log({ message: [selector], $el: subject }),
         });
 
-        return cy.tryWithAssertionVerify(window => bbFindElement(subject, window, selector, filledOptions), filledOptions);
+        return cy.window({ log: false }).then(
+            {
+                timeout: (options?.timeout ?? Cypress.config("defaultCommandTimeout")) + 1000,
+            },
+            (w) => tryWithAssertionVerify(() => bbFindElement(subject, w, selector, filledOptions), filledOptions)
+        );
     }
 );
 
 Cypress.Commands.add(
     "getData",
     {
-        prevSubject: ["optional", "element"]
+        prevSubject: ["optional", "element"],
     },
-    <TData>(
+    function <TData>(
         subject: JQuery<HTMLElement> | undefined,
         selector: string,
         dataName: string,
         options?: Partial<IOptions>
-    ): Cypress.Chainable<(TData | undefined)[]> => {
+    ): Cypress.Chainable<(TData | undefined)[]> {
         const filledOptions: IOptions = Object.assign(options || {}, {
-            _log: Cypress.log({ message: [`${selector}, data: ${dataName}`] })
+            _log: Cypress.log({ message: [`${selector}, data: ${dataName}`] }),
         });
 
-        return cy.tryWithAssertionVerify(window => bbFindData<TData>(subject, window, selector, dataName, filledOptions), filledOptions);
+        return cy.tryWithAssertionVerify((window) => bbFindData<TData>(subject, window, selector, dataName, filledOptions), filledOptions);
     }
 );
 
 Cypress.Commands.add(
     "getProperty",
     {
-        prevSubject: ["optional", "element"]
+        prevSubject: ["optional", "element"],
     },
-    <TData>(
+    function <TData>(
         subject: JQuery<HTMLElement> | undefined,
         selector: string,
         propertyPath: string,
         options?: Partial<IOptions>
-    ): Cypress.Chainable<(TData | undefined)[]> => {
+    ): Cypress.Chainable<(TData | undefined)[]> {
         const filledOptions: IOptions = Object.assign(options || {}, {
-            _log: Cypress.log({ message: [`${selector}, property: ${propertyPath}`] })
+            _log: Cypress.log({ message: [`${selector}, property: ${propertyPath}`] }),
         });
 
         return cy.tryWithAssertionVerify(
-            window => bbFindProperty<TData>(subject, window, selector, propertyPath, filledOptions),
+            (window) => bbFindProperty<TData>(subject, window, selector, propertyPath, filledOptions),
             filledOptions
         );
     }
@@ -170,14 +176,14 @@ function log<TResult>(
         {
             Yielded: result,
             Elements: (result as Array<TResult>).length,
-            Selector: selector
+            Selector: selector,
         },
         params
     );
 
     options._log.set({
         $el: result as JQuery<HTMLElement>,
-        consoleProps: () => consoleProps
+        consoleProps: () => consoleProps,
     });
 }
 
@@ -206,7 +212,7 @@ function bbFindProperty<TData>(
     const result = window.BBSeeker.getProperty(selector, propertyPath, root);
 
     log(options, result, selector, { PropertyPath: propertyPath });
-    return result as (TData | undefined)[];
+    return (result as Object) as (TData | undefined)[];
 }
 
 function getRoot(subject: JQuery<HTMLElement> | undefined): HTMLElement | undefined {

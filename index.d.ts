@@ -1,9 +1,12 @@
+// eslint-disable-next-line spaced-comment
 /// <reference types="cypress" />
+// eslint-disable-next-line spaced-comment
 /// <reference types="bbseeker" />
 
 declare global {
     interface Window extends IBobrilWindow {
         DEBUG: boolean;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         BBSeeker?: any;
     }
 }
