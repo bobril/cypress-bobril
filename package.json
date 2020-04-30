@@ -1,6 +1,6 @@
 {
     "name": "cypress-bobril",
-    "version": "2.0.0",
+    "version": "2.0.1",
     "description": "Cypress commands for searching bobril components.",
     "main": "index.d.ts",
     "scripts": {
@@ -24,15 +24,15 @@
     "homepage": "https://github.com/bobril/cypress-bobril#readme",
     "dependencies": {
         "bbseeker": "^1.0.6",
-        "cypress": "^4.5.0",
-        "typescript": "^3.8.3"
+        "cypress": "^4.5.0"
     },
     "devDependencies": {
         "@typescript-eslint/eslint-plugin": "*",
         "@typescript-eslint/parser": "*",
         "eslint": "*",
         "eslint-config-bobril": "*",
-        "prettier": "*"
+        "prettier": "*",
+        "typescript": "^3.8.3"
     },
     "prettier": {
         "printWidth": 140,
