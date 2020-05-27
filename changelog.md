@@ -1,5 +1,17 @@
 # cypress-bobril
 
+## [2.0.2] - 2020-05-27
+
+### Change
+
+-   Return webpack until cypress supports tsconfig
+
+## [2.0.1] - 2020-05-01
+
+### Change
+
+-   Simplified TS config
+
 ## [2.0.0] - 2020-04-29
 
 ### Change

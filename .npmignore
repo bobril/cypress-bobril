@@ -12,4 +12,4 @@ cypress
 node_modules
 snapshots
 sampleApp
-webpack.config.js
+webpack.config.ts
