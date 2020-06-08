@@ -1,5 +1,11 @@
 # cypress-bobril
 
+## [2.0.3] - 2020-06-08
+
+### Change
+
+-   Fix dependencies
+
 ## [2.0.2] - 2020-05-27
 
 ### Change
