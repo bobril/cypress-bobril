@@ -11,7 +11,7 @@ interface IBBSeeker {
 }
 
 declare global {
-    // tslint:disable-next-line: interface-name
+    // eslint-disable-next-line @typescript-eslint/interface-name-prefix
     interface Window {
         DEBUG: boolean;
         BBSeeker: IBBSeeker;
@@ -78,17 +78,17 @@ function getWindow(prevSubject?: Window): Cypress.Chainable<Window> {
     return prevSubject ? cy.wrap(prevSubject, { log: false }) : cy.window({ log: false });
 }
 
-Cypress.Commands.add("tryWithAssertionVerify", function <TValue>(
-    findFn: (window: Window) => TValue,
-    options: Partial<IOptions>
-): PromiseLike<TValue> {
-    return cy.window({ log: false }).then(
-        {
-            timeout: (options?.timeout ?? Cypress.config("defaultCommandTimeout")) + 1000,
-        },
-        (window) => tryWithAssertionVerify(() => findFn(window), Object.assign({ retry: true, verify: true }, options))
-    );
-});
+Cypress.Commands.add(
+    "tryWithAssertionVerify",
+    <TValue>(findFn: (window: Window) => TValue, options: Partial<IOptions>): PromiseLike<TValue> => {
+        return cy.window({ log: false }).then(
+            {
+                timeout: (options?.timeout ?? Cypress.config("defaultCommandTimeout")) + 1000,
+            },
+            (window) => tryWithAssertionVerify(() => findFn(window), Object.assign({ retry: true, verify: true }, options))
+        );
+    }
+);
 
 function tryWithAssertionVerify<TValue>(findFn: () => TValue | PromiseLike<TValue>, options?: Partial<IOptions>): PromiseLike<TValue> {
     return Cypress.Promise.try(findFn).then((value) => {
@@ -108,12 +108,7 @@ Cypress.Commands.add(
             _log: Cypress.log({ message: [selector], $el: subject }),
         });
 
-        return cy.window({ log: false }).then(
-            {
-                timeout: (options?.timeout ?? Cypress.config("defaultCommandTimeout")) + 1000,
-            },
-            (w) => tryWithAssertionVerify(() => bbFindElement(subject, w, selector, filledOptions), filledOptions)
-        );
+        return cy.tryWithAssertionVerify((window) => bbFindElement(subject, window, selector, filledOptions), filledOptions);
     }
 );
 
@@ -122,12 +117,12 @@ Cypress.Commands.add(
     {
         prevSubject: ["optional", "element"],
     },
-    function <TData>(
+    <TData>(
         subject: JQuery<HTMLElement> | undefined,
         selector: string,
         dataName: string,
         options?: Partial<IOptions>
-    ): Cypress.Chainable<(TData | undefined)[]> {
+    ): Cypress.Chainable<(TData | undefined)[]> => {
         const filledOptions: IOptions = Object.assign(options || {}, {
             _log: Cypress.log({ message: [`${selector}, data: ${dataName}`] }),
         });
@@ -141,12 +136,12 @@ Cypress.Commands.add(
     {
         prevSubject: ["optional", "element"],
     },
-    function <TData>(
+    <TData>(
         subject: JQuery<HTMLElement> | undefined,
         selector: string,
         propertyPath: string,
         options?: Partial<IOptions>
-    ): Cypress.Chainable<(TData | undefined)[]> {
+    ): Cypress.Chainable<(TData | undefined)[]> => {
         const filledOptions: IOptions = Object.assign(options || {}, {
             _log: Cypress.log({ message: [`${selector}, property: ${propertyPath}`] }),
         });
@@ -212,7 +207,7 @@ function bbFindProperty<TData>(
     const result = window.BBSeeker.getProperty(selector, propertyPath, root);
 
     log(options, result, selector, { PropertyPath: propertyPath });
-    return (result as Object) as (TData | undefined)[];
+    return result as (TData | undefined)[];
 }
 
 function getRoot(subject: JQuery<HTMLElement> | undefined): HTMLElement | undefined {

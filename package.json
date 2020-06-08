@@ -1,6 +1,6 @@
 {
     "name": "cypress-bobril",
-    "version": "2.0.3",
+    "version": "2.0.4",
     "description": "Cypress commands for searching bobril components.",
     "main": "index.d.ts",
     "scripts": {

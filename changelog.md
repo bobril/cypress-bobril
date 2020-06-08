@@ -1,5 +1,11 @@
 # cypress-bobril
 
+## [2.0.4] - 2020-06-09
+
+### Change
+
+-   Fix commands window issue
+
 ## [2.0.3] - 2020-06-08
 
 ### Change
