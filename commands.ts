@@ -80,7 +80,7 @@ function getWindow(prevSubject?: Window): Cypress.Chainable<Window> {
 
 Cypress.Commands.add(
     "tryWithAssertionVerify",
-    <TValue>(findFn: (window: Window) => TValue, options: Partial<IOptions>): PromiseLike<TValue> => {
+    <TValue>(findFn: (window: Window) => TValue, options: Partial<IOptions>): Cypress.Chainable<TValue> => {
         return cy.window({ log: false }).then(
             {
                 timeout: (options?.timeout ?? Cypress.config("defaultCommandTimeout")) + 1000,
