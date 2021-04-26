@@ -25,7 +25,6 @@ interface IOptions extends Partial<Cypress.Timeoutable> {
 
 window.DEBUG = false;
 
-const bbSeekerPath: string = "node_modules/bbseeker/lib.js";
 
 Cypress.Commands.add(
     "visitWithBBSeeker",
@@ -67,7 +66,7 @@ Cypress.Commands.add(
             if (win.BBSeeker !== undefined) {
                 return cy.wrap(win, { log: false });
             }
-            return cy.readFile(bbSeekerPath, { log: false }).then((text) => {
+            return cy.readFile(require.resolve("bbseeker"), { log: false }).then((text) => {
                 win.eval(text);
             });
         });

@@ -1,4 +1,9 @@
 # cypress-bobril
+## [4.1.0] - 2021-04-26
+
+### fixed
+
+-   Resolve BB seeker path dynamically
 
 ## [4.0.0] - 2020-12-02
 
