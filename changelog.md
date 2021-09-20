@@ -1,4 +1,13 @@
 # cypress-bobril
+
+## [4.1.1] - 2021-09-20
+
+-   Add cypress@^8.0.1
+
+### fixed
+
+-   Resolve BB seeker path dynamically
+
 ## [4.1.0] - 2021-04-26
 
 ### fixed
