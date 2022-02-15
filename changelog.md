@@ -1,5 +1,7 @@
 # cypress-bobril
+## [4.2.0] - 2022-02-15
 
+-   Update cypress@^9.2.0
 ## [4.1.1] - 2021-09-20
 
 -   Add cypress@^8.0.1

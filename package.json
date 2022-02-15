@@ -1,6 +1,6 @@
 {
     "name": "cypress-bobril",
-    "version": "4.1.1",
+    "version": "4.2.0",
     "description": "Cypress commands for searching bobril components.",
     "main": "index.d.ts",
     "scripts": {
@@ -24,7 +24,7 @@
     "homepage": "https://github.com/bobril/cypress-bobril#readme",
     "dependencies": {
         "bbseeker": "^1.0.6",
-        "cypress": "^7.0.0 || ^8.0.0"
+        "cypress": "^9.2.0"
     },
     "devDependencies": {
         "@cypress/webpack-preprocessor": "^5.5.0",
