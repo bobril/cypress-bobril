@@ -3,16 +3,12 @@
 // eslint-disable-next-line spaced-comment
 /// <reference types="bbseeker" />
 
-declare global {
-    interface Window extends IBobrilWindow {
-        DEBUG: boolean;
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        BBSeeker?: any;
-    }
+interface IOptions extends Partial<Cypress.Timeoutable> {
+    _log: Cypress.Log;
 }
 
 declare namespace Cypress {
-    interface Chainable<Subject> {
+    interface Chainable {
         /**
          * Visit the given url and injects BB Seeker
          *
@@ -31,6 +27,7 @@ declare namespace Cypress {
         visitWithBBSeeker(url: string, options?: Partial<VisitOptions>): Chainable<Window>;
         visitWithBBSeeker(options: Partial<VisitOptions> & { url: string }): Chainable<Window>;
         injectBBSeeker(options?: Partial<Cypress.Loggable>): Cypress.Chainable<Window>;
+
         /**
          * Performs recursive search of a page virtual DOM starting from bobril root objects. All matching objects are returned as instances of HTMLElement.
          * @param bbSeekerSelector search expression, see examples in node_modules/bbseeker/lib.ts
@@ -55,9 +52,6 @@ declare namespace Cypress {
          */
         getProperty<TData>(selector: string, dataPath: string, options?: Partial<Cypress.Timeoutable>): Chainable<TData[]>;
         verifyUpcomingAssertions<TValue>(value: TValue, options?: Object, retryOptions?: Object): TValue;
-        tryWithAssertionVerify<TValue>(
-            findFn: (window: Window) => TValue,
-            options?: Partial<Cypress.Timeoutable>
-        ): Cypress.Chainable<TValue>;
+        tryWithAssertionVerify<TValue>(findFn: (window: Window) => TValue, options?: Partial<IOptions>): Cypress.Chainable<TValue>;
     }
 }

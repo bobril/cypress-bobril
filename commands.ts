@@ -25,7 +25,6 @@ interface IOptions extends Partial<Cypress.Timeoutable> {
 
 window.DEBUG = false;
 
-
 Cypress.Commands.add(
     "visitWithBBSeeker",
     (url: string | Partial<Cypress.VisitOptions>, options?: Partial<Cypress.VisitOptions>): Cypress.Chainable<Window> => {
@@ -46,7 +45,6 @@ Cypress.Commands.add(
         }
 
         mainCommandLog && Cypress.log({ message });
-
         return cy.visit(url as string, options).injectBBSeeker({ log: false });
     }
 );
@@ -57,12 +55,10 @@ function isString(url: string | Partial<Cypress.VisitOptions>): url is string {
 
 Cypress.Commands.add(
     "injectBBSeeker",
-    {
-        prevSubject: ["optional", "window"],
-    },
-    (prevSubject?: Window, options?: Partial<Cypress.Loggable>): Cypress.Chainable<Window> => {
+    { prevSubject: ["optional", "window"] },
+    (subject: Window | void, options?: Partial<Cypress.Loggable>): Cypress.Chainable<Window> => {
         (!options || options.log !== false) && Cypress.log({});
-        return getWindow(prevSubject).then((win) => {
+        return getWindow(subject).then((win) => {
             if (win.BBSeeker !== undefined) {
                 return cy.wrap(win, { log: false });
             }
@@ -73,13 +69,13 @@ Cypress.Commands.add(
     }
 );
 
-function getWindow(prevSubject?: Window): Cypress.Chainable<Window> {
+function getWindow(prevSubject: Window | void): Cypress.Chainable<Window> {
     return prevSubject ? cy.wrap(prevSubject, { log: false }) : cy.window({ log: false });
 }
 
 Cypress.Commands.add(
     "tryWithAssertionVerify",
-    <TValue>(findFn: (window: Window) => TValue, options: Partial<IOptions>): Cypress.Chainable<TValue> => {
+    <TValue>(findFn: (window: Window) => TValue, options?: Partial<IOptions>): Cypress.Chainable<TValue> => {
         return cy.window({ log: false }).then(
             {
                 timeout: (options?.timeout ?? Cypress.config("defaultCommandTimeout")) + 1000,
@@ -102,9 +98,13 @@ Cypress.Commands.add(
     {
         prevSubject: ["optional", "element"],
     },
-    (subject: JQuery<HTMLElement> | undefined, selector: string, options?: Partial<IOptions>): Cypress.Chainable<JQuery<HTMLElement>> => {
+    (
+        subject: JQuery<HTMLElement> | void,
+        selector: string,
+        options?: Partial<Cypress.Timeoutable>
+    ): Cypress.Chainable<JQuery<HTMLElement>> => {
         const filledOptions: IOptions = Object.assign(options || {}, {
-            _log: Cypress.log({ message: [selector], $el: subject }),
+            _log: Cypress.log({ message: [selector], $el: subject || undefined }),
         });
 
         return cy.tryWithAssertionVerify((window) => bbFindElement(subject, window, selector, filledOptions), filledOptions);
@@ -117,7 +117,7 @@ Cypress.Commands.add(
         prevSubject: ["optional", "element"],
     },
     <TData>(
-        subject: JQuery<HTMLElement> | undefined,
+        subject: JQuery<HTMLElement> | void,
         selector: string,
         dataName: string,
         options?: Partial<IOptions>
@@ -136,7 +136,7 @@ Cypress.Commands.add(
         prevSubject: ["optional", "element"],
     },
     <TData>(
-        subject: JQuery<HTMLElement> | undefined,
+        subject: JQuery<HTMLElement> | void,
         selector: string,
         propertyPath: string,
         options?: Partial<IOptions>
@@ -152,7 +152,7 @@ Cypress.Commands.add(
     }
 );
 
-function bbFindElement(subject: JQuery<HTMLElement> | undefined, window: Window, selector: string, options: IOptions): JQuery<HTMLElement> {
+function bbFindElement(subject: JQuery<HTMLElement> | void, window: Window, selector: string, options: IOptions): JQuery<HTMLElement> {
     const root = getRoot(subject);
     const result = Cypress.$(window.BBSeeker.findElements(selector, root));
     (result as Cypress.ObjectLike).selector = selector;
@@ -182,7 +182,7 @@ function log<TResult>(
 }
 
 function bbFindData<TData>(
-    subject: JQuery<HTMLElement> | undefined,
+    subject: JQuery<HTMLElement> | void,
     window: Window,
     selector: string,
     dataName: string,
@@ -196,7 +196,7 @@ function bbFindData<TData>(
 }
 
 function bbFindProperty<TData>(
-    subject: JQuery<HTMLElement> | undefined,
+    subject: JQuery<HTMLElement> | void,
     window: Window,
     selector: string,
     propertyPath: string,
@@ -209,7 +209,7 @@ function bbFindProperty<TData>(
     return result as (TData | undefined)[];
 }
 
-function getRoot(subject: JQuery<HTMLElement> | undefined): HTMLElement | undefined {
+function getRoot(subject: JQuery<HTMLElement> | void): HTMLElement | undefined {
     if (subject) {
         return subject.get(0);
     }
