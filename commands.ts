@@ -25,29 +25,28 @@ interface IOptions extends Partial<Cypress.Timeoutable> {
 
 window.DEBUG = false;
 
-Cypress.Commands.add(
-    "visitWithBBSeeker",
-    (url: string | Partial<Cypress.VisitOptions>, options?: Partial<Cypress.VisitOptions>): Cypress.Chainable<Window> => {
-        let mainCommandLog: boolean = true;
-        let message: string[];
-        if (isString(url)) {
-            message = [url];
-            if (options) {
-                mainCommandLog = options.log !== false;
-                options.log = false;
-            } else {
-                options = { log: false };
-            }
+Cypress.Commands.add("visitWithBBSeeker", (url: string | Partial<Cypress.VisitOptions>, options?: Partial<Cypress.VisitOptions>):
+    | Cypress.Chainable<Window>
+    | Cypress.Chainable<Cypress.AUTWindow> => {
+    let mainCommandLog: boolean = true;
+    let message: string[];
+    if (isString(url)) {
+        message = [url];
+        if (options) {
+            mainCommandLog = options.log !== false;
+            options.log = false;
         } else {
-            message = url.url ? [url.url] : [];
-            mainCommandLog = url.log !== false;
-            url.log = false;
+            options = { log: false };
         }
-
-        mainCommandLog && Cypress.log({ message });
-        return cy.visit(url as string, options).injectBBSeeker({ log: false });
+    } else {
+        message = url.url ? [url.url] : [];
+        mainCommandLog = url.log !== false;
+        url.log = false;
     }
-);
+
+    mainCommandLog && Cypress.log({ message });
+    return cy.visit(url as string, options).injectBBSeeker({ log: false });
+});
 
 function isString(url: string | Partial<Cypress.VisitOptions>): url is string {
     return typeof url === "string";
@@ -56,7 +55,7 @@ function isString(url: string | Partial<Cypress.VisitOptions>): url is string {
 Cypress.Commands.add(
     "injectBBSeeker",
     { prevSubject: ["optional", "window"] },
-    (subject: Window | void, options?: Partial<Cypress.Loggable>): Cypress.Chainable<Window> => {
+    (subject: Window | void, options?: Partial<Cypress.Loggable>): Cypress.Chainable<Window> | Cypress.Chainable<Cypress.AUTWindow> => {
         (!options || options.log !== false) && Cypress.log({});
         return getWindow(subject).then((win) => {
             if (win.BBSeeker !== undefined) {
@@ -69,7 +68,7 @@ Cypress.Commands.add(
     }
 );
 
-function getWindow(prevSubject: Window | void): Cypress.Chainable<Window> {
+function getWindow(prevSubject: Window | void): Cypress.Chainable<Window> | Cypress.Chainable<Cypress.AUTWindow> {
     return prevSubject ? cy.wrap(prevSubject, { log: false }) : cy.window({ log: false });
 }
 

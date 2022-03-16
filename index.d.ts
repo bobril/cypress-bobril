@@ -24,9 +24,11 @@ declare namespace Cypress {
          *    })
          *
          */
-        visitWithBBSeeker(url: string, options?: Partial<VisitOptions>): Chainable<Window>;
-        visitWithBBSeeker(options: Partial<VisitOptions> & { url: string }): Chainable<Window>;
-        injectBBSeeker(options?: Partial<Cypress.Loggable>): Cypress.Chainable<Window>;
+        visitWithBBSeeker(url: string, options?: Partial<VisitOptions>): Cypress.Chainable<Window> | Cypress.Chainable<Cypress.AUTWindow>;
+        visitWithBBSeeker(
+            options: Partial<VisitOptions> & { url: string }
+        ): Cypress.Chainable<Window> | Cypress.Chainable<Cypress.AUTWindow>;
+        injectBBSeeker(options?: Partial<Cypress.Loggable>): Cypress.Chainable<Window> | Cypress.Chainable<Cypress.AUTWindow>;
 
         /**
          * Performs recursive search of a page virtual DOM starting from bobril root objects. All matching objects are returned as instances of HTMLElement.
