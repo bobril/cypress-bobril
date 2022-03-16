@@ -1,4 +1,8 @@
 # cypress-bobril
+## [4.2.1] - 2022-03-16
+
+-   Resolved errors with TS 4.6.2
+    - methods injectBBSeeker and visitWithBBSeeker newly returns also Cypress.Chainable<Cypress.AUTWindow>
 ## [4.2.0] - 2022-02-15
 
 -   Update cypress@^9.2.0
