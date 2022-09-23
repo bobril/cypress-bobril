@@ -1,11 +1,18 @@
 # cypress-bobril
+
+## [4.3.0] - 2022-09-23
+
+-   Upgrade cypress@^10.8.0
+
 ## [4.2.1] - 2022-03-16
 
 -   Resolved errors with TS 4.6.2
-    - methods injectBBSeeker and visitWithBBSeeker newly returns also Cypress.Chainable<Cypress.AUTWindow>
+    -   methods injectBBSeeker and visitWithBBSeeker newly returns also Cypress.Chainable<Cypress.AUTWindow>
+
 ## [4.2.0] - 2022-02-15
 
 -   Update cypress@^9.2.0
+
 ## [4.1.1] - 2021-09-20
 
 -   Add cypress@^8.0.1
