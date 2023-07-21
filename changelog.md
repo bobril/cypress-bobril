@@ -1,5 +1,9 @@
 # cypress-bobril
 
+## [4.4.0] - 2023-07-21
+
+-   Upgrade cypress@12.14.0
+
 ## [4.3.0] - 2022-09-23
 
 -   Upgrade cypress@^10.8.0
